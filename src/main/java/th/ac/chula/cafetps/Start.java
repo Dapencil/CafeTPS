@@ -1,9 +1,9 @@
 package th.ac.chula.cafetps;
 
-import th.ac.chula.cafetps.helper.Helper;
+import java.security.NoSuchAlgorithmException;
 
 public class Start {
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        CafeTPSApplication.main(args);
     }
 }
