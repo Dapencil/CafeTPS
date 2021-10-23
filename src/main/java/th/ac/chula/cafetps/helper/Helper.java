@@ -2,7 +2,6 @@ package th.ac.chula.cafetps.helper;
 
 import javafx.collections.ObservableList;
 import th.ac.chula.cafetps.PriceTable;
-import th.ac.chula.cafetps.helper.DatabaseHelper;
 import th.ac.chula.cafetps.model.Item;
 import th.ac.chula.cafetps.model.ItemRecord;
 import th.ac.chula.cafetps.model.Member;
@@ -13,7 +12,6 @@ import java.util.*;
 
 public class Helper {
 
-    // don't forget to change path
     private final ArrayList<ItemRecord> records;
     private final PriceTable priceTable;
 
