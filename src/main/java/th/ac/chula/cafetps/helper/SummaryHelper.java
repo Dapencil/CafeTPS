@@ -1,7 +1,8 @@
-package th.ac.chula.cafetps.helper;
+package th.ac.chula.cafetps;
 
 import javafx.scene.chart.XYChart;
 import th.ac.chula.cafetps.constants.ItemCategory;
+import th.ac.chula.cafetps.helper.DatabaseHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -167,12 +168,13 @@ public class SummaryHelper {
                     inner join (select * from Receipt where strftime('%Y-%m',create_date)  = ?) as temp
                     on Receipt_Detail.r_id = temp.r_id
                     where m_id not in (select m_id from Member
-                    where cast((julianday('now')-julianday(join_date))/30 as integer) <= 3)) as right
+                    where cast((julianday(?)-julianday(join_date))/30 as integer) <= 3)) as right
                     on Item.item_id = right.id);
                 """;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,yearAndMonth);
+            preparedStatement.setString(2,yearAndMonth+"-30");
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             profit = resultSet.getString(1);
@@ -191,12 +193,13 @@ public class SummaryHelper {
                     inner join (select Receipt_Detail.r_id,m_id,item_id as id,amount from Receipt_Detail
                     inner join (select * from Receipt where strftime('%Y-%m',create_date)  = ?) as temp
                     on Receipt_Detail.r_id = temp.r_id
-                    where m_id  in (select m_id from Member where cast((julianday('now')-julianday(join_date))/30 as integer) <= 3)) as right
+                    where m_id  in (select m_id from Member where cast((julianday(?)-julianday(join_date))/30 as integer) <= 3)) as right
                     on Item.item_id = right.id);
                 """;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,yearAndMonth);
+            preparedStatement.setString(2,yearAndMonth+"-30");
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             profit = resultSet.getString(1);
@@ -229,6 +232,48 @@ public class SummaryHelper {
             e.printStackTrace();
         }
         return profit==null ? "0":profit;
+    }
+
+    public static String getNewMemberThisMonth(String yearAndMonth){
+        Connection connection = DatabaseHelper.connect();
+        String data = null;
+        String sql = """
+                select * from Member
+                where cast((julianday(?)-julianday(join_date))/30 as integer) <= 3;
+                """;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,yearAndMonth+"-30");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            data = resultSet.getString(1);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return data==null? "0":data;
+    }
+
+    public static String getNewMemberEngagementThisMonth(String yearAndMonth){
+        Connection connection = DatabaseHelper.connect();
+        String data = null;
+        String sql = """
+                select count(create_date) from Receipt
+                inner join (select * from Member
+                where cast((julianday(?)-julianday(join_date))/30 as integer) <= 3) as temp
+                on Receipt.m_id = temp.m_id
+                where strftime('%Y-%m',create_date)  = ?;
+                """;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,yearAndMonth+"-30");
+            preparedStatement.setString(2,yearAndMonth);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            data = resultSet.getString(1);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return data==null? "0":data;
     }
 
     private static String categoryConverter(ItemCategory category){
