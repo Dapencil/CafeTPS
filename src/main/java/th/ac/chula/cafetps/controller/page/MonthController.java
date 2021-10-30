@@ -129,12 +129,14 @@ public class MonthController extends SwitchController {
         chart.getData().add(getDataLine(values.get("coffee"),"Coffee"));
         chart.getData().add(getDataLine(values.get("noncoffee"),"Non-Coffee"));
 
-        int maxY = chart.getData().stream().flatMap(s -> s.getData().stream())
+        int maxY[] = new int[3];
+
+        maxY[0] = chart.getData().stream().flatMap(s -> s.getData().stream())
                 .max(Comparator.comparing(XYChart.Data::getYValue))
                 .map(XYChart.Data::getYValue).orElse(Integer.MIN_VALUE);
 
         yaxis.setAutoRanging(false);
-        yaxis.setUpperBound((maxY/5.0+1)*5);
+        yaxis.setUpperBound((maxY[0]/5+1)*5);
         chart.getData().remove(0);
         chart.setAnimated(true);
 
@@ -151,6 +153,8 @@ public class MonthController extends SwitchController {
 
     private void updateMemberAnalysis(){
         String yearMonth = selectorBox.getValue();
+        formatLabelText(newMemberInThisMonth,SummaryHelper.getNewMemberThisMonth(yearMonth));
+        formatLabelText(newMemberEngagement,SummaryHelper.getNewMemberEngagementThisMonth(yearMonth));
         formatLabelText(profitFromMember,SummaryHelper.profitFromMember(yearMonth));
         formatLabelText(profitFromNewMember,SummaryHelper.profitFromNewMember(yearMonth));
         formatLabelText(profitFromGuest,SummaryHelper.profitFromGuest(yearMonth));

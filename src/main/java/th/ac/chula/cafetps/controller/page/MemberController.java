@@ -3,6 +3,7 @@ package th.ac.chula.cafetps.controller.page;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,6 +14,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MemberController extends SwitchController {
+
+    @FXML
+    private Button homeButton;
 
     @FXML
     private TextField phoneNumField;
@@ -44,7 +48,7 @@ public class MemberController extends SwitchController {
 
 
 
-    public void addMember(){
+    public void addMember() throws InterruptedException{
         String m_id = phoneNumField.getText();
         String name = fullnameField.getText();
         String gender = genderBox.getValue();
@@ -57,6 +61,7 @@ public class MemberController extends SwitchController {
                     DatabaseHelper.addMember(m_id,name,gender,dob);
                     alertmsg.setTextFill(Color.GREEN);
                     alertmsg.setText("สมัครสมาชิกเสร็จสิ้น");
+                    homeButton.fire();
                 }else alertmsg.setText("กรุณากรอกวันเกิดให้ถูกต้อง");
             }else alertmsg.setText("กรุณากรอกชื่อ-นามสกุล");
         }else alertmsg.setText("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง");

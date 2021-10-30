@@ -12,6 +12,7 @@ import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class DatabaseHelper {
     public static Connection connect(){
@@ -101,24 +102,6 @@ public class DatabaseHelper {
         }catch (SQLException | ParseException e){
             e.printStackTrace();
         }
-    }
-
-    static ResultSet recentOrderQuery(String phoneNumber){
-        ResultSet result = null;
-        String getRecent = "SELECT max(r_id) FROM Receipt WHERE m_id = '%s'".formatted(phoneNumber);
-        String getLastOrder = "SELECT * FROM Receipt_Detail WHERE  r_id = '%s'";
-        Connection connection = DatabaseHelper.connect();
-        try{
-            Statement statement = connection.createStatement();
-            result = statement.executeQuery(getRecent);
-            result.next();
-            getLastOrder = getLastOrder.formatted(result.getInt(1)); // receipt_id
-            result = statement.executeQuery(getLastOrder);
-            connection.close();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return result;
     }
 
     public static ArrayList<ItemRecord> getItemRecord(){

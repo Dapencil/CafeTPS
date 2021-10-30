@@ -28,17 +28,26 @@ public class DatabaseManager {
     }
 
     public Optional<List<Item>> getRecentOrder(String phoneNumber){
-        ResultSet result = DatabaseHelper.recentOrderQuery(phoneNumber);
+        ResultSet result = null;
+        Stream.Builder<Item> bd = Stream.builder();
+        String getRecent = "SELECT max(r_id) FROM Receipt WHERE m_id = '%s'".formatted(phoneNumber);
+        String getLastOrder = "SELECT * FROM Receipt_Detail WHERE  r_id = '%s'";
+        Connection connection = DatabaseHelper.connect();
         try{
-            if(Objects.isNull(result)) return Optional.empty();
-            Stream.Builder<Item> bd = Stream.builder();
+            Statement statement = connection.createStatement();
+            result = statement.executeQuery(getRecent);
+            result.next();
+            getLastOrder = getLastOrder.formatted(result.getInt(1)); // receipt_id
+            result = statement.executeQuery(getLastOrder);
             while (result.next())
                 bd.add(getItemFromID(
                         result.getInt("item_id"),
                         result.getInt("amount"),
                         result.getString("sweetness")));
+            connection.close();
             return Optional.of(bd.build().collect(Collectors.toList()));
         }catch (SQLException e){
+            System.out.println("Where error occured");
             e.printStackTrace();
         }
         return Optional.empty();

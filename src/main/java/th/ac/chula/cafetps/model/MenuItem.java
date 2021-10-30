@@ -3,7 +3,6 @@ package th.ac.chula.cafetps.model;
 import th.ac.chula.cafetps.helper.DatabaseManager;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class MenuItem {
     private ArrayList<Item> recentOrder = new ArrayList<>();

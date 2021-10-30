@@ -4,6 +4,7 @@ import javafx.scene.chart.XYChart;
 import th.ac.chula.cafetps.constants.ItemCategory;
 
 import java.sql.*;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -229,6 +230,49 @@ public class SummaryHelper {
             e.printStackTrace();
         }
         return profit==null ? "0":profit;
+    }
+
+    public static String getNewMemberThisMonth(String yearAndMonth){
+        Connection connection = DatabaseHelper.connect();
+        String data = null;
+        String sql = """
+                select count(*) from Member
+                where strftime('%Y-%m',join_date)  = ?;
+                """;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,yearAndMonth);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            data = resultSet.getString(1);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return data==null? "0":data;
+    }
+
+    public static String getNewMemberEngagementThisMonth(String yearAndMonth){
+        YearMonth yearMonth = YearMonth.parse(yearAndMonth);
+        Connection connection = DatabaseHelper.connect();
+        String data = null;
+        String sql = """
+                select count(create_date) from Receipt
+                inner join (select * from Member
+                where cast((julianday(?)-julianday(join_date))/30 as integer) <= 3) as temp
+                on Receipt.m_id = temp.m_id
+                where strftime('%Y-%m',create_date)  = ?;
+                """;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,yearAndMonth+"-"+yearMonth.lengthOfMonth());
+            preparedStatement.setString(2,yearAndMonth);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            data = resultSet.getString(1);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return data==null? "0":data;
     }
 
     private static String categoryConverter(ItemCategory category){

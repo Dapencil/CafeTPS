@@ -165,7 +165,6 @@ public class HomeOrderController extends SwitchController{
     }
 
     public void init(){
-//        member = helper.memberCheck("0842053668");
         MenuItem temp = new MenuItem(databaseManager,member);
         ArrayList<Item> recentOrder = temp.getRecentOrder();
         int column = 0;
@@ -332,7 +331,7 @@ public class HomeOrderController extends SwitchController{
         if(receiptShow.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.getDialogPane().getStylesheets().add(Utility.loadStyleSheet(getClass()));
-            alert.setContentText("ไม่มีสินค้า");
+            alert.setContentText("ไม่พบสินค้าในคำสั่งซื้อ");
             alert.initStyle(StageStyle.UNDECORATED);
             alert.show();
         }else {
