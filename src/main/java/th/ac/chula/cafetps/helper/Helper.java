@@ -1,7 +1,7 @@
 package th.ac.chula.cafetps.helper;
 
 import javafx.collections.ObservableList;
-import th.ac.chula.cafetps.PriceTable;
+import th.ac.chula.cafetps.model.PriceTable;
 import th.ac.chula.cafetps.model.Item;
 import th.ac.chula.cafetps.model.ItemRecord;
 import th.ac.chula.cafetps.model.Member;
@@ -84,7 +84,7 @@ public class Helper {
         String commandReceipt = "INSERT INTO Receipt VALUES(null,?,?,?,?)";
         try{
             PreparedStatement statement = connection.prepareStatement(commandReceipt);
-            statement.setString(1,member.getID());
+            statement.setString(1,member.getID().toString());
             statement.setString(2,employee.getUsername());
             statement.setInt(3,total);
             statement.setString(4,DatabaseHelper.getNow());

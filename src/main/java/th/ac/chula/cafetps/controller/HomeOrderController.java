@@ -18,11 +18,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import th.ac.chula.cafetps.*;
-import th.ac.chula.cafetps.MenuItem;
+import th.ac.chula.cafetps.model.MenuItem;
 import th.ac.chula.cafetps.constants.ItemProperty;
 import th.ac.chula.cafetps.helper.DatabaseHelper;
 import th.ac.chula.cafetps.model.Item;
 import th.ac.chula.cafetps.model.Member;
+import th.ac.chula.cafetps.model.PickItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -160,7 +161,6 @@ public class HomeOrderController extends SwitchController{
     }
 
     public void init(){
-//        member = helper.memberCheck("0842053668");
         MenuItem temp = new MenuItem(helper,member);
         ArrayList<Item> recentOrder = temp.getRecentOrder();
         int column = 0;
@@ -210,7 +210,7 @@ public class HomeOrderController extends SwitchController{
                         AddItemController controller = getPopupStage(loader,addPopupStage,cardController);
                         controller.addButton.setOnMouseClicked((MouseEvent e) ->{
                             if( controller.propertyBox.getValue()==null || controller.sweetnessBox.getValue()==null ){
-                                controller.alertmsg.setText("กรุณาเลือกข้อมูลให้ครบถ้วน");
+                                controller.alertMsg.setText("กรุณาเลือกข้อมูลให้ครบถ้วน");
                             }else{
                                 Item item = new Item(cardController.pickItem.getName(),controller.getPropertyFromBox(),controller.getQuantity(),controller.getSweetness());
                                 item.setPricePerUnit(helper.getPriceTable().getPrice(item.getName(),item.getProperty()));
@@ -247,7 +247,7 @@ public class HomeOrderController extends SwitchController{
                         AddItemController controller = getPopupStage(loader,addPopupStage,cardController);
                         controller.addButton.setOnMouseClicked((MouseEvent e) ->{
                             if(cardController.pickItem.getName().equals("อิตาเลี่ยนโซดา")){
-                                if(controller.propertyBox.getValue()==null) controller.alertmsg.setText("กรุณาเลือกข้อมูลให้ครบถ้วน");
+                                if(controller.propertyBox.getValue()==null) controller.alertMsg.setText("กรุณาเลือกข้อมูลให้ครบถ้วน");
                                 else{
                                 Item item = new Item(cardController.pickItem.getName(), controller.getPropertyFromBox(), controller.getQuantity(),"");
                                 item.setPricePerUnit(helper.getPriceTable().getPrice(item.getName(), item.getProperty()));
@@ -256,7 +256,7 @@ public class HomeOrderController extends SwitchController{
                                 }
                             }
                             else if((controller.propertyBox.getValue()==null || controller.sweetnessBox.getValue()==null)){
-                                controller.alertmsg.setText("กรุณาเลือกข้อมูลให้ครบถ้วน");
+                                controller.alertMsg.setText("กรุณาเลือกข้อมูลให้ครบถ้วน");
                             }else {
                                 Item item = new Item(cardController.pickItem.getName(), controller.getPropertyFromBox(), controller.getQuantity(), controller.getSweetness());
                                 item.setPricePerUnit(helper.getPriceTable().getPrice(item.getName(), item.getProperty()));
