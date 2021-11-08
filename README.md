@@ -1,4 +1,20 @@
-# CafeTPS
-### Cafe Management System
+# Cafe_TPS (✿◡‿◡)
+###  A cafe management system which focuses on TPS and analytic CRM 
 
-This is a reference application for 2301251 Intro Info System Project.
+This application is in class project for 2301251 Intro Info System.<br>
+<span href=".../เล่มซอฟต์แวร์ประมวลผลรายการร้านกาแฟ.pdf">Proposal of this project was provided above.</span>
+<br>
+<font color="red">All data are mocked.</font> (¬_¬ )
+###Application features
+- Order goods
+- Monthly summary (sales,basic customer analytics)
+- Register new member
+
+### My responsibility
+- UX/UI Designing
+- Frontend Development
+- Mocking customer data
+- Database Designing 
+- Query command Designing
+- Creating method for query from database using JDBC
+
