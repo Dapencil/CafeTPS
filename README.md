@@ -2,7 +2,7 @@
 ###  A cafe management system which focuses on TPS and analytic CRM 
 
 This application is in class project for 2301251 Intro Info System.<br>
-<a href=".../เล่มซอฟต์แวร์ประมวลผลรายการร้านกาแฟ.pdf">Proposal of this project was provided here.</a>
+<a href="เล่มซอฟต์แวร์ประมวลผลรายการร้านกาแฟ.pdf">Proposal of this project was provided here.</a>
 <br>
 <font color="red">All data are mocked.</font> (¬_¬ )
 ###Application features
