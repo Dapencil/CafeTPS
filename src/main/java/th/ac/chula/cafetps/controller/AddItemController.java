@@ -27,16 +27,10 @@ public class AddItemController {
     public ChoiceBox<String> sweetnessBox;
 
     @FXML
-    public TextField amountField;
-
-    @FXML
     public Button addButton;
 
     @FXML
     private Button minusButton;
-
-    @FXML
-    private Button plusButton;
 
     @FXML
     private Label amount;

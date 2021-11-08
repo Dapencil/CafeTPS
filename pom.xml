@@ -104,7 +104,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>th.ac.chula.cafetps.cafetps/th.ac.chula.cafetps.Start
+                            <mainClass>th.ac.chula.cafetps.Start
                             </mainClass>
                         </configuration>
                     </execution>

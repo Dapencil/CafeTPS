@@ -17,15 +17,13 @@ import th.ac.chula.cafetps.helper.SummaryHelper;
 
 import java.time.YearMonth;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static th.ac.chula.cafetps.Utility.formatLabelText;
 
 public class MonthController extends SwitchController {
 
     @FXML
-    private LineChart<String, Integer> chart;
+    private LineChart<Integer, Integer> chart;
 
     @FXML
     private Label monthNameLabel;
@@ -68,6 +66,9 @@ public class MonthController extends SwitchController {
 
     @FXML
     private NumberAxis yaxis;
+
+    @FXML
+    private NumberAxis xaxis;
 
     @FXML
     private Label yearLabel2;
@@ -122,9 +123,10 @@ public class MonthController extends SwitchController {
     }
 
     public void refreshChart(){
-        HashMap<String, ArrayList<XYChart.Data<String,Integer>>> values = SummaryHelper.getChartData(selectorBox.getValue());
+        HashMap<String, ArrayList<XYChart.Data<Integer,Integer>>> values = SummaryHelper.getChartData(selectorBox.getValue());
 
         chart.getData().add(getMockLine(YearMonth.parse(selectorBox.getValue())));
+
         chart.getData().add(getDataLine(values.get("bakery"),"Bakery"));
         chart.getData().add(getDataLine(values.get("coffee"),"Coffee"));
         chart.getData().add(getDataLine(values.get("noncoffee"),"Non-Coffee"));
@@ -137,8 +139,11 @@ public class MonthController extends SwitchController {
 
         yaxis.setAutoRanging(false);
         yaxis.setUpperBound((maxY[0]/5+1)*5);
+        xaxis.setAutoRanging(false);
+        xaxis.setUpperBound((YearMonth.parse(selectorBox.getValue()).lengthOfMonth()+1));
+        xaxis.setTickUnit(1);
         chart.getData().remove(0);
-        chart.setAnimated(true);
+        chart.setAnimated(false);
 
         chart.getChildrenUnmodifiable().stream()
                 .filter(Legend.class::isInstance)
@@ -183,17 +188,14 @@ public class MonthController extends SwitchController {
 
     private void updateSellUnit(){
         HashMap<String,Integer> values = SummaryHelper.getSellUnit(selectorBox.getValue());
-        int[] v = IntStream.of(values.get("bakery"),
-                        values.get("coffee"),
-                        values.get("noncoffee"))
-                .toArray();
-
-        formatLabelText(bakeryUnitLabel,values.get("bakery"));
-        formatLabelText(coffeeUnitLabel,values.get("coffee"));
-        formatLabelText(nonUnitLabel,values.get("noncoffee"));
-        formatLabelText(totalUnitLabel,values.get("bakery")
-                + values.get("coffee")
-                + values.get("noncoffee"));
+        int bakeryAMT = values.get("bakery")== null ? 0:values.get("bakery");
+        int coffeeAMT = values.get("coffee")== null ? 0:values.get("coffee");
+        int nonCoffeeAMT = values.get("noncoffee")== null ? 0:values.get("noncoffee");
+        int total = bakeryAMT + coffeeAMT + nonCoffeeAMT;
+        formatLabelText(bakeryUnitLabel,bakeryAMT);
+        formatLabelText(coffeeUnitLabel,coffeeAMT);
+        formatLabelText(nonUnitLabel,nonCoffeeAMT);
+        formatLabelText(totalUnitLabel,total);
     }
 
     private void updateIncomeCostProfit(){
@@ -220,21 +222,22 @@ public class MonthController extends SwitchController {
         formatLabelText(netTotalamount,netTotal);
     }
 
-    private static XYChart.Series<String,Integer> getMockLine(YearMonth yearMonth){
-        return new XYChart.Series<>(
-        FXCollections.observableList(IntStream.range(0, yearMonth.lengthOfMonth()).boxed()
-                .map(i -> new XYChart.Data<>((i + 1) + "", 0))
-                .collect(Collectors.toList())));
+    private static XYChart.Series<Integer,Integer> getMockLine(YearMonth yearMonth){
+        XYChart.Series<Integer,Integer> temp = new XYChart.Series<>();
+        for(int i = 1;i<yearMonth.lengthOfMonth()+1;i++){
+            temp.getData().add(new XYChart.Data<>(i,0));
+        }
+
+        return  temp;
     }
 
-    private static XYChart.Series<String,Integer> getDataLine(ArrayList<XYChart.Data<String,Integer>> list,
-                                                              String displayName){
-        XYChart.Series<String,Integer> line = new XYChart.Series<>(FXCollections.observableList(list));
+    private static XYChart.Series<Integer,Integer> getDataLine(ArrayList<XYChart.Data<Integer,Integer>> list, String displayName){
+        XYChart.Series<Integer,Integer> line = new XYChart.Series<>(FXCollections.observableList(list));
         line.setName(displayName);
         return line;
     }
 
-    private static void prepareLegendToggle(Legend.LegendItem li, XYChart.Series<String,Integer> s){
+    private static void prepareLegendToggle(Legend.LegendItem li, XYChart.Series<Integer,Integer> s){
         li.getSymbol().setCursor(Cursor.HAND); // Hint user that legend symbol is clickable
         li.getSymbol().setOnMouseClicked(me -> {
             if (me.getButton().equals(MouseButton.PRIMARY)) {

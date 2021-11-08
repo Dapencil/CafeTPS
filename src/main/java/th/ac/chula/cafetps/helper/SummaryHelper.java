@@ -103,8 +103,8 @@ public class SummaryHelper {
         }return rental;
     }
 
-    public static HashMap<String,ArrayList<XYChart.Data<String,Integer>>> getChartData(String yearAndMonth){
-        HashMap<String,ArrayList<XYChart.Data<String,Integer>>> data = new HashMap<>();
+    public static HashMap<String,ArrayList<XYChart.Data<Integer,Integer>>> getChartData(String yearAndMonth){
+        HashMap<String,ArrayList<XYChart.Data<Integer,Integer>>> data = new HashMap<>();
         data.put("bakery",new ArrayList<>());
         data.put("coffee",new ArrayList<>());
         data.put("noncoffee",new ArrayList<>());
@@ -124,7 +124,7 @@ public class SummaryHelper {
             while (resultSet.next()){
                 if(data.containsKey(resultSet.getString("category"))){
                     data.get(resultSet.getString("category")).add(new XYChart.Data<>(
-                            resultSet.getInt("day") + "", resultSet.getInt("total")));
+                            resultSet.getInt("day"), resultSet.getInt("total")));
                 }
             }
             connection.close();
@@ -168,7 +168,7 @@ public class SummaryHelper {
                     inner join (select * from Receipt where strftime('%Y-%m',create_date)  = ?) as temp
                     on Receipt_Detail.r_id = temp.r_id
                     where m_id not in (select m_id from Member
-                    where cast((julianday('now')-julianday(join_date))/30 as integer) <= 3)) as right
+                    where cast((julianday('now')-julianday(join_date))/30 as integer) <= 3) and m_id <> "0") as right
                     on Item.item_id = right.id);
                 """;
         try {
@@ -245,6 +245,7 @@ public class SummaryHelper {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             data = resultSet.getString(1);
+            connection.close();
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -269,6 +270,7 @@ public class SummaryHelper {
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             data = resultSet.getString(1);
+            connection.close();
         }catch (SQLException e){
             e.printStackTrace();
         }

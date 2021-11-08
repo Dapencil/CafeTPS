@@ -47,7 +47,6 @@ public class DatabaseManager {
             connection.close();
             return Optional.of(bd.build().collect(Collectors.toList()));
         }catch (SQLException e){
-            System.out.println("Where error occured");
             e.printStackTrace();
         }
         return Optional.empty();

@@ -15,10 +15,17 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class DatabaseHelper {
+
+    private static Connection connection = null;
+
     public static Connection connect(){
-        Connection connection = null;
         try{
-            connection = DriverManager.getConnection(Constants.DATABASE_NAME);
+            if(connection == null){
+                connection = DriverManager.getConnection(Constants.DATABASE_NAME);
+            }else{
+                connection.close();
+                connection = DriverManager.getConnection(Constants.DATABASE_NAME);
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -63,18 +70,18 @@ public class DatabaseHelper {
 
     public static String getNow(){
         java.util.Date time = Calendar.getInstance().getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss",Locale.US);
         return formatter.format(time);
     }
 
     public static String getToday(){
         java.util.Date today = Calendar.getInstance().getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
         return formatter.format(today);
     }
 
     public static String getDate(String date) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
         java.util.Date dateTemp = formatter.parse(date);
         return formatter.format(dateTemp);
     }

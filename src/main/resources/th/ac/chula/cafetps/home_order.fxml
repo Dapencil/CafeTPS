@@ -14,7 +14,7 @@
                <children>
                   <HBox layoutX="83.0" prefHeight="96.0" prefWidth="698.0" spacing="10.0">
                      <children>
-                        <Button graphicTextGap="16.0" maxHeight="97.0" mnemonicParsing="false" prefHeight="96.0" prefWidth="173.0" styleClass="navbar-button" stylesheets="@stylesheet.css" text="Home" textFill="WHITE">
+                        <Button fx:id="homeButton"  onAction="#switchToHome" graphicTextGap="16.0" maxHeight="97.0" mnemonicParsing="false" prefHeight="96.0" prefWidth="173.0" styleClass="navbar-button" stylesheets="@stylesheet.css" text="Home" textFill="WHITE">
                            <font>
                               <Font name="Angsana New" size="24.0" />
                            </font>

@@ -78,6 +78,9 @@ public class HomeOrderController extends SwitchController{
     @FXML
     private VBox recentBox;
 
+    @FXML
+    private Button homeButton;
+
 
     private Member member;
 
@@ -376,17 +379,7 @@ public class HomeOrderController extends SwitchController{
                     member.setPoints(member.getPoints()+paySecondController.getPoint());
                     databaseManager.updatePoint(member);
                     payPopup.close();
-                    FXMLLoader loader = Utility.loadResource(getClass(),"home");;
-                    try{
-                        root = loader.load();
-                        HomeController homeController = loader.getController();
-                        homeController.setHelper(databaseManager);
-                        homeController.setEmployee(employee);
-                        scene = new Scene(root);
-                        stage.setScene(scene);
-                    } catch (IOException e){
-                        e.printStackTrace();
-                    }
+                    homeButton.fire();
                 });
                 payPopup.show();
             } catch (IOException e) {
@@ -397,8 +390,24 @@ public class HomeOrderController extends SwitchController{
     }
 
     private void addItem(Item item){
-        receiptShow.add(item);
+        Item checker = findItem(item);
+        if(checker == null){
+            receiptShow.add(item);
+        }else{
+            int quantity = checker.getQuantity();
+            receiptShow.remove(receiptShow.indexOf(checker));
+            item.setQuantity(quantity+ item.getQuantity());
+            receiptShow.add(item);
+        }
+
         totalPrice.setText(getTotal()+"");
+    }
+
+    private Item findItem(Item item){
+        for(Item checker:receiptShow){
+            if(item.getName().equals(checker.getName()) && item.getProperty()==checker.getProperty() && item.getSweetness().equals(checker.getSweetness())) return checker;
+        }
+        return null;
     }
 
     public Member getMember() {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -145,7 +144,7 @@
                                     </Pane>
                                     <LineChart fx:id="chart" prefHeight="767.0" prefWidth="820.0">
                                        <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
+                                          <NumberAxis fx:id="xaxis" side="BOTTOM" />
                                        </xAxis>
                                        <yAxis>
                                           <NumberAxis fx:id="yaxis" side="LEFT" />
